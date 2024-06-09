@@ -1,0 +1,174 @@
+options:
+    1: K
+    2: a
+    3: y
+    4: e
+    5: r
+    6: a
+    7: R
+    8: P
+    perm: kayerarp # Bu kısımda yetkilerin başındaki kısım bulunmakta. Örneğin buraya kayerarp yazarsam yetkili olması gereken oyunculara kayerarp.yetkili permini vermem gerekir.
+    prefix: <##3681d9>&l{@1}<##0c93df>&l{@2}<##00a4e2>&l{@3}<##00b4e1>&l{@4}<##21c3de>&l{@5}<##49d1da>&l{@6}<##00ddc6>&l{@7}<##29E6BA>&l{@8} &8►►
+
+command /karakter [<text>] [<text>] [<text>] [<number>] [<text>] [<text>]:
+    aliases: krktr, character, char
+    trigger:
+        load yaml "plugins/KayeraRP/Storage/%player%.yml" as "data-%player%"
+        load yaml "plugins/KayeraRP/Cooldowns/ShowID/id.%player%.yml" as "idshow-%player%"
+        load yaml "plugins/KayeraRP/Meeted/mtd.%player%.yml" as "meeted-%player%"
+        set {_check} to yml value "created" from "data-%player%"
+        if arg-1 is "oluştur":
+            if {_check} is true:
+                send "{@prefix} &cZaten karakter oluşturmuşsunuz!" to player
+            else:
+                if arg-2 is set:
+                    set {_isim.%player%} to arg-2
+                    if arg-3 is set:
+                        set {_soyisim.%player%} to arg-3
+                        if arg-4 is set:
+                            set {_yas.%player%} to arg-4
+                            if arg-5 is set:
+                                set {_aksan.%player%} to arg-5
+                                if player has potion blindness:
+                                    execute command "/effect clear %player% blindness"
+                                if arg-6 is "Erkek":
+                                    set {_cinsiyet.%player%} to "Erkek"
+                                    set {_kimlikno} to random integer between 100 and 999
+                                    set yaml value "citizen-id" in "data-%player%" to {_kimlikno}
+                                    set yaml value "created" in "data-%player%" to true
+                                    set yaml value "name" in "data-%player%" to {_isim.%player%}
+                                    set yaml value "surname" in "data-%player%" to {_soyisim.%player%}
+                                    set yaml value "age" in "data-%player%" to {_yas.%player%}
+                                    set yaml value "accent" in "data-%player%" to {_aksan.%player%}
+                                    set yaml value "gender" in "data-%player%" to {_cinsiyet.%player%}
+                                    set yaml value "muted" in "data-%player%" to false
+                                    set yaml value "idcd.%player%" in "idshow-%player%" to false
+                                    save yaml "data-%player%"
+                                    send "{@prefix} <##24a596>&lKarakter oluşturuldu:"
+                                    send "{@prefix} &fKarakter: %{_isim.%player%}% %{_soyisim.%player%}%"
+                                    send "{@prefix} &fYaş: %{_yas.%player%}%"
+                                    send "{@prefix} &fCinsiyet: %{_cinsiyet.%player%}%"
+                                    send "{@prefix} &fAksan: %{_aksan.%player%}% Aksanı"
+                                    send ""
+                                    send "{@prefix} &e&lBir problem mi var? &fDestek talebi açarak bilgilerinizi değiştirebilirsiniz."
+                                    loop all players:
+                                        if loop-player has permission "{@perm}.yetkili":
+                                            if loop-player is player:
+
+                                            else:
+                                                send "{@prefix} <##24a596>%player% &fadlı oyuncu karakterini oluşturdu:" to loop-player
+                                                send "{@prefix} &fNS: %{_isim.%player%}% %{_soyisim.%player%}%" to loop-player
+                                                send "{@prefix} &fA: %{_yas.%player%}%" to loop-player
+                                                send "{@prefix} &fG: %{_cinsiyet.%player%}%" to loop-player
+                                                send "{@prefix} &fAC: %{_aksan.%player%}%" to loop-player
+                                                send "{@prefix} &fID: %{_kimlikno}%" to loop-player
+                                                json("%loop-player%", "&8►►► &fOyuncuya ışınlanmak için &atıkla.||cmd:/tp %player%||")
+                                                json("%loop-player%", "&8►►► &fOyuncuyu atmak için &atıkla.||cmd:/kick %player%||")
+                                                json("%loop-player%", "&8►►► &fOyuncuyu beyaz listeden çıkartmak için &atıkla.||cmd:/whitelist remove %player%||")
+                                else if arg-6 is "Kadın" or "Kız":
+                                    set {_cinsiyet.%player%} to "Kadın"
+                                    set {_kimlikno} to random integer between 100 and 999
+                                    set yaml value "citizen-id" in "data-%player%" to {_kimlikno}
+                                    set yaml value "created" in "data-%player%" to true
+                                    set yaml value "name" in "data-%player%" to {_isim.%player%}
+                                    set yaml value "surname" in "data-%player%" to {_soyisim.%player%}
+                                    set yaml value "age" in "data-%player%" to {_yas.%player%}
+                                    set yaml value "accent" in "data-%player%" to {_aksan.%player%}
+                                    set yaml value "gender" in "data-%player%" to {_cinsiyet.%player%}
+                                    set yaml value "muted" in "data-%player%" to false
+                                    set yaml value "idcd.%player%" in "idshow-%player%" to false
+                                    save yaml "data-%player%"
+                                    send "{@prefix} <##24a596>&lKarakter oluşturuldu:"
+                                    send "{@prefix} &fKarakter: %{_isim.%player%}% %{_soyisim.%player%}%"
+                                    send "{@prefix} &fYaş: %{_yas.%player%}%"
+                                    send "{@prefix} &fCinsiyet: %{_cinsiyet.%player%}%"
+                                    send "{@prefix} &fAksan: %{_aksan.%player%}% Aksanı"
+                                    send ""
+                                    send "{@prefix} &e&lBir problem mi var? &fDestek talebi açarak bilgilerinizi değiştirebilirsiniz."
+                                    loop all players:
+                                        if loop-player has permission "{@perm}.yetkili":
+                                            if loop-player is player:
+
+                                            else:
+                                                send "{@prefix} <##24a596>%player% &fadlı oyuncu karakterini oluşturdu:" to loop-player
+                                                send "{@prefix} &fNS: %{_isim.%player%}% %{_soyisim.%player%}%" to loop-player
+                                                send "{@prefix} &fA: %{_yas.%player%}%" to loop-player
+                                                send "{@prefix} &fG: %{_cinsiyet.%player%}%" to loop-player
+                                                send "{@prefix} &fAC: %{_aksan.%player%}%" to loop-player
+                                                send "{@prefix} &fID: %{_kimlikno}%" to loop-player
+                                                json("%loop-player%", "&8►►► &fOyuncuya ışınlanmak için &atıkla.||cmd:/tp %player%||")
+                                                json("%loop-player%", "&8►►► &fOyuncuyu atmak için &atıkla.||cmd:/kick %player%||")
+                                                json("%loop-player%", "&8►►► &fOyuncuyu beyaz listeden çıkartmak için &atıkla.||cmd:/whitelist remove %player%||")
+                                else:
+                                    send "{@prefix} <##D93667>Karakter oluşturmak için /karakter oluştur (isim) (soyisim) (yaş) (aksan) (cinsiyet)" to player
+                            else:
+                                send "{@prefix} <##D93667>Karakter oluşturmak için /karakter oluştur (isim) (soyisim) (yaş) (aksan) (cinsiyet)" to player
+                        else:
+                            send "{@prefix} <##D93667>Karakter oluşturmak için /karakter oluştur (isim) (soyisim) (yaş) (aksan) (cinsiyet)" to player
+                    else:
+                        send "{@prefix} <##D93667>Karakter oluşturmak için /karakter oluştur (isim) (soyisim) (yaş) (aksan) (cinsiyet)" to player
+                else:
+                    send "{@prefix} <##D93667>Karakter oluşturmak için /karakter oluştur (isim) (soyisim) (yaş) (aksan) (cinsiyet)" to player
+        else if arg-1 is "kimlik":
+            if arg-2 is set:
+                set {_cooldowncheck} to yml value "idcd.%player%" from "idshow"
+                if {_cooldowncheck} is true:
+                    send "{@prefix} <##FF4040>Kimliğinizi tekrar göstermeden önce bir süre beklemelisiniz." to player
+                else:
+                    set {_p} to arg-2 parsed as player
+                    if {_p} is online:
+                        set yaml value "idcd.%player%" in "idshow" to true
+                        set {_1} to yml value "name" from "data-%player%"
+                        set {_2} to yml value "surname" from "data-%player%"
+                        set {_3} to yml value "age" from "data-%player%"
+                        set {_4} to yml value "gender" from "data-%player%"
+                        set {_5} to yml value "accent" from "data-%player%"
+                        set {_6} to yml value "citizen-id" from "data-%player%"
+                        send "{@prefix} <##06a598> %arg-2% adlı oyuncuya kimliğinizi gösteriyorsunuz." to player
+                        send "{@prefix} <##06a598> %player% adlı oyuncu size kimliğini gösteriyor." to {_p}
+                        send "{@prefix} &fKarakter: %{_1}% %{_2}%" to {_p}
+                        send "{@prefix} &fYaş: %{_3}%" to {_p}
+                        send "{@prefix} &fCinsiyet: %{_4}%" to {_p}
+                        send "{@prefix} &fAksan: %{_5}% Aksanı" to {_p}
+                        send "{@prefix} &fKimlik No: %{_6}%" to {_p}
+                        send "{@prefix} <##04D600>%player% adlı oyuncuyu artık tanıyorsun." to {_p}
+                        set yaml value "meeted.%{_p}%" in "meeted-%player%" to "%{_p}%_%player%"
+                        save yml "meeted-%player%"
+                        wait 60 seconds
+                        set yaml value "idcd.%player%" in "idshow" to false
+                    else:
+                        send "{@prefix} <##06a598> %arg-2% adında bir oyuncu bulunamadı." to player
+
+on player move:
+    load yaml "plugins/KayeraRP/Storage/%player%.yml" as "data-%player%"
+    set {_check} to yml value "created" from "data-%player%"
+    if {_check} is true:
+
+    else:
+        cancel event
+        if player has potion blindness:
+
+        else:
+            apply infinite potion of blindness of tier 5 to the player
+        send "{@prefix} <##06a598>Role başlamak için karakterinizi oluşturmalısınız: /karakter oluştur"
+
+on command:
+    if command sender is a player:
+        load yaml "plugins/KayeraRP/Storage/%player%.yml" as "data-%player%"
+        set {_check} to yml value "created" from "data-%player%"
+        if {_check} is true:
+
+        else:
+            if command contains "karakter":
+
+            else:
+                cancel event
+                send "{@prefix} <##06a598>Role başlamak için karakterinizi oluşturmalısınız: /karakter oluştur"
+
+on join:
+    load yaml "plugins/KayeraRP/Storage/%player%.yml" as "data-%player%"
+    set {_check} to yml value "created" from "data-%player%"
+    if {_check} is true:
+
+    else:
+        apply infinite potion of blindness of tier 5 to the player
